@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>GIS Application - Extended Template by Cyber313</title>
+        <!-- <meta name="author" content="luckynvic@gmail.com"> -->
+        <link href="web/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="web/ext/customScroll/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+        <link href="web/css/style.default.css" rel="stylesheet">
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    </head>
+    <body>
+
+
+        <nav class="navbar navbar-default nav-fixed-top" role="navigation" id="app-nav-bar" >
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Konflik GIS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index">Home</a>
+                    </li>
+                    <li>
+                        <a href="chart">Chart</a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav">
+                    <!-- <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Setting</a>
+                            </li>
+                            <li>
+                                <a href="#">Manage User</a>
+                            </li>
+
+                        </ul>
+                    </li> -->
+                    <li class="dropdown, active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Table<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Data Kecamatan</a>
+                            </li>
+                            <li>
+                                <a href="#">Category</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about">About</a>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <p class="navbar-text">
+                            Signed in as Admin
+                        </p>
+                    </li>
+                    <li>
+                        <a href="#">Login</a>
+                    </li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+
+        <div class="container">
+            <h2>Histori Kejadian Konflik</h2>
+
+            <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <!-- <th>ID</th> -->
+                  <th>Kecamatan</th>
+                  <th>Administrasi</th>
+                  <th>Politik Uang</th>
+                  <th>Kode Etik</th>
+                  <th>Total Kejadian 2018</th>
+                  <th>     Manage</th>
+                </tr>
+              </thead>
+              <tbody id="isidata">
+
+
+              </tbody>
+            </table>
+            <ul class="pagination">
+             <li class="page-item"><a class="page-link" href="#" onclick="bukaHalaman(1)">1</a></li>
+             <li class="page-item"><a class="page-link" href="#" onclick="bukaHalaman(2)">2</a></li>
+             <li class="page-item"><a class="page-link" href="#" onclick="bukaHalaman(3)">3</a></li>
+            </ul>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+              </div>
+              <div class="modal-body">
+                <p>Some text in the modal.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Modal section Add -->
+           <div class="modal fade" id="modal-edit">
+           <div class="modal-dialog" style="right:0px;left:0px;">
+             <div class="modal-content">
+               <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                   <span aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">Edit Kejadian Konflik</h4>
+               </div>
+               <div id="input-provinsi-baru" class="modal-body">
+                 <div class="form-group">
+                   <label for="administrasi">Pelanggaran Administrasi</label>
+                   <input id="administrasi" type="text" class="form-control" placeholder="administrasi">
+                 </div><div class="form-group">
+                   <label for="politikuang">Money Politics</label>
+                   <input id="politikuang" type="text" class="form-control" placeholder="politikuang">
+                 </div><div class="form-group">
+                   <label for="kodeetik">Pelanggaran Kode Etik</label>
+                   <input id="kodeetik" type="text" class="form-control" placeholder="kodeetik">
+                 </div><div class="form-group">
+                   <label for="tahun_2018">Tahun 2018</label>
+                   <input id="tahun_2018" type="text" class="form-control" placeholder="Kejadian 2018">
+                 </div>
+               </div>
+               <div class="modal-footer">
+                 <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+                 <button id="tombol-admin-baru" type="button" class="btn btn-outline" onclick="editKonflik()" data-dismiss="modal" >Submit</button>
+                 <i class="fa fa-refresh w3-spin w3-right w3-padding" style="font-size:18px;display:none" id="loading-simpan-baru"></i>
+               </div>
+             </div>
+             <!-- /.modal-content -->
+           </div>
+           <!-- /.modal-dialog -->
+           </div>
+         <!-- /.modal -->
+
+
+         <!-- alert -->
+          <div class="box-body" style="display: none" id="alert-success">
+            <div class="alert alert-success alert-dismissible" onclick="hideNotif(this)">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> Alert!</h4>
+              Data successfully saved
+            </div>
+          </div>
+
+          <div class="box-body" style="display: none" id="alert-warning">
+            <div class="alert alert-warning alert-dismissible" onclick="hideNotif(this)">
+              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <h4><i class="icon fa fa-check"></i> Alert!</h4>
+              Fail to save data
+            </div>
+          </div>
+          <!-- alert -->
+
+        <script>
+
+        var halaman = 1;
+        var makshalaman = 3;
+        var idToEdit = 0;
+        var selectedName = "";
+
+
+
+        function getKecamatan() {
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    let tabel = JSON.parse(this.responseText);
+                    // console.log(tabel);
+                    let listKecamatan = document.getElementById("isidata");
+
+                    tabel.forEach(function(datum) {
+                      // console.log(datum);
+                      //inisialisasi element
+                      let isicontainer = document.createElement("tr");
+
+                      // let tdID = document.createElement("td");
+                      let tdKecamatan = document.createElement("td");
+                      let tdadministrasi = document.createElement("td");
+                      let tdpolitikuang = document.createElement("td");
+                      let tdkodeetik = document.createElement("td");
+                      let td2018 = document.createElement("td");
+
+                      let tdadministrasiData = document.createTextNode(datum.administrasi);
+                      let tdpolitikuangData = document.createTextNode(datum.politikuang);
+                      let tdkodeetikData = document.createTextNode(datum.kodeetik);
+                      let td2018Data = document.createTextNode(datum.tahun2018);
+
+                      let manageContainer = document.createElement("td");
+                      let manageButtonContainer = document.createElement("div");
+                      let editButton = document.createElement("button");
+                      let editIconButton = document.createElement("i");
+                      let editText = document.createTextNode("Edit");
+                      // let deleteButton = document.createElement("button");
+                      // let deleteIconButton = document.createElement("i");
+                      // let deleteText = document.createTextNode("Delete");
+
+
+                      // set setAttribute
+                      manageButtonContainer.setAttribute("class","btn-group");
+                      tdadministrasi.setAttribute("id", "tdadministrasi");
+                      tdpolitikuang.setAttribute("id", "tdpolitikuang");
+                      tdkodeetik.setAttribute("id", "tdkodeetik");
+                      td2018.setAttribute("id", "td2018");
+                      editButton.setAttribute("class","btn btn-primary");
+                      editButton.setAttribute("type","button");
+                      editButton.setAttribute("style","width: 75px");
+                      editButton.setAttribute("data-toggle","modal");
+                      editButton.setAttribute("data-target","#modal-edit");
+                      editButton.setAttribute("onclick","selectName("+datum.id+")");
+                      editIconButton.setAttribute("class", "fa fa-edit");
+
+                      // deleteButton.setAttribute("class","btn btn-danger");
+                      // deleteButton.setAttribute("type","button");
+                      // deleteButton.setAttribute("style","width: 75px");
+                      // deleteButton.setAttribute("onclick","selectName("+datum.id+")");
+                      // deleteIconButton.setAttribute("class", "fa fa-trash");
+
+                        // Isi konten element
+                      let KecamatanText = document.createTextNode(datum.daerah);
+                      let Textadministrasi = document.createTextNode(datum.administrasi);
+                      let Textpolitikuang = document.createTextNode(datum.politikuang);
+                      let Textkodeetik = document.createTextNode(datum.kodeetik);
+                      let Text2018 = document.createTextNode(datum.tahun2018);
+                      // let TextManage = document.createTextNode(<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                      //       <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>);
+
+                      isicontainer.setAttribute("class","row-kecamatan");
+
+                      // gabungkan element
+                      // tdID.appendChild(IdText);
+                      tdKecamatan.appendChild(KecamatanText);
+                      tdadministrasi.appendChild(Textadministrasi);
+                      tdpolitikuang.appendChild(Textpolitikuang);
+                      tdkodeetik.appendChild(Textkodeetik);
+                      td2018.appendChild(Text2018);
+
+                      editIconButton.appendChild(editText);
+                      editButton.appendChild(editIconButton);
+                      // deleteIconButton.appendChild(deleteText);
+                      // deleteButton.appendChild(deleteIconButton);
+                      manageContainer.appendChild(editButton);
+                      // manageContainer.appendChild(deleteButton);
+                      // manageContainer.appendChild(manageButtonContainer);
+
+
+                      // isicontainer.appendChild(tdID);
+                      isicontainer.appendChild(tdKecamatan);
+                      isicontainer.appendChild(tdadministrasi);
+                      isicontainer.appendChild(tdpolitikuang);
+                      isicontainer.appendChild(tdkodeetik);
+                      isicontainer.appendChild(td2018);
+                      isicontainer.appendChild(manageContainer);
+
+                      listKecamatan.appendChild(isicontainer);
+
+                      });
+                  }
+            };
+
+            xhttp.open("GET", "/api/historikonflik?halaman="+halaman, true);
+            xhttp.setRequestHeader("Content-type","application/json");
+            xhttp.send();
+        }
+
+        function bukaHalaman(hal){
+          if (hal < 1){
+            hal = 1;
+          }else if(hal >= makshalaman){
+            hal = makshalaman;
+          }
+
+          halaman = hal;
+          resetHalaman();
+          getKecamatan();
+        }
+
+        function resetHalaman() {
+          let elemen = document.getElementsByClassName("row-kecamatan");
+          console.log("elemen:" + elemen.length);
+
+          while(elemen.length) {
+            elemen[0].parentNode.removeChild(elemen[0]);
+          }
+        }
+
+        getKecamatan();
+
+
+        function selectName(id){
+          idToEdit = id;
+          var HTTPRequest = new XMLHttpRequest();
+          HTTPRequest.onreadystatechange = function(){
+            if (this.readyState == 4 && this.status == 200) {
+
+                selectedName = JSON.parse(this.responseText);
+                // console.log(tabel);
+                document.getElementById("administrasi").value = selectedName.administrasi;
+                document.getElementById("politikuang").value = selectedName.politikuang;
+                document.getElementById("kodeetik").value = selectedName.kodeetik;
+                document.getElementById("tahun_2018").value = selectedName.tahun2018;
+          }
+        };
+        HTTPRequest.open("GET", "/api/historikonflik/" + id, true);
+        HTTPRequest.send();
+      }
+
+      function postLaporan(data) {
+				var xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function() {
+					if(this.readyState == 4 && this.status == 200) {
+						if(JSON.parse(this.responseText)) {
+							window.open('sukses', '_self');
+						}
+					}
+				};
+
+				xhr.open("POST", "/api/historikonflik", true);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.send(JSON.stringify(data));
+			}
+
+      function putLaporan(data) {
+				let xhr = new XMLHttpRequest();
+
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						if(JSON.parse(this.responseText)) {
+							// keluarEdit();
+							// showBlock("notif-simpan");
+              document.getElementById("alert-success").style.display="block";
+						} else {
+							// keluarEdit();
+							// showBlock("notif-gagal");
+              document.getElementById("alert-warning").style.display="block";
+						}
+					}
+				};
+
+				xhr.open('PUT', '/api/historikonflik', true);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.send(JSON.stringify(data));
+			}
+
+      function editKonflik(){
+        let kadministrasi = document.getElementById("administrasi").value;
+        let kpolitikuang = document.getElementById("politikuang").value;
+        let kkodeetik = document.getElementById("kodeetik").value;
+        let kTahun2018 = document.getElementById("tahun_2018").value;
+
+        let data = {
+          id : idToEdit,
+          administrasi : kadministrasi,
+          politikuang : kpolitikuang,
+          kodeetik : kkodeetik,
+          tahun2018 : kTahun2018
+        };
+        putLaporan(data);
+      }
+
+      function hideNotif(element) {
+
+      }
+
+
+
+        </script>
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="web/js/jquery-1.10.2.min.js"></script>
+        <script src="web/js/bootstrap.min.js"></script>
+
+    </body>
+</html>

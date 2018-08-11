@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.abdikaalbiyan.AppTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 6.584 sec <<< FAILURE! - in com.abdikaalbiyan.AppTest
+integrationTest(com.abdikaalbiyan.AppTest)  Time elapsed: 3.953 sec  <<< ERROR!
+java.net.ConnectException: Connection refused: connect
+	at com.abdikaalbiyan.AppTest.integrationTest(AppTest.java:26)
+

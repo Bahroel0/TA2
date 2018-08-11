@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>KonfliGIS</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="LandingPage/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="LandingPage/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="LandingPage/css/grayscale.min.css" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBghk9jAdvsc1oOXNRmpYYaIMXEUCdCkZY&callback=initMap"
+    async defer></script>
+
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Politeknik Elektronika Negeri Surabaya</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">Maps</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#about">Chart</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#signup">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead">
+      <div class="container d-flex h-100 align-items-center">
+        <div class="mx-auto text-center">
+          <h1 class="mx-auto my-0 text-uppercase">KonfliGIS</h1>
+          <h2 class="text-white-50 mx-auto mt-2 mb-5">Aplikasi spasial pemetaan konflik saat Pilkada dengan metode Autokorelasi Spasial.</h2>
+          <a href="#about" class="btn btn-primary js-scroll-trigger">Memulai</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- About Section -->
+    <!-- <section id="about" class="about-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <h2 class="text-white mb-4">Built with Bootstrap 4</h2>
+            <div alt="" class="img-fluid" id="map" style="width: 1000%; height: 780%"></div>
+          </div>
+        </div>
+        <img src="LandingPage/img/ipad.png" class="img-fluid" alt="">
+      </div>
+    </section> -->
+
+    <!-- Projects Section -->
+    <section id="about" class="projects-section bg-light">
+      <div class="container">
+
+        <!-- Featured Project Row -->
+        <div class="row align-items-center no-gutters mb-4 mb-lg-5">
+          <div class="col-xl-8 col-lg-7" id="map" style="width: 100px;height: 400px;"></div>
+          <div class="col-xl-4 col-lg-5">
+            <div class="featured-text text-center text-lg-left">
+              <h4>-Peta Visual</h4>
+
+              <div class="progress" style="height:25px">
+                <div class="progress-bar bg-danger" style="width:25%">
+                  <h6>High-High</h6>
+                </div>
+                <div class="progress-bar bg-warning" style="width:25%">
+                  <h6>High-Low</h6>
+                </div>
+                <div class="progress-bar bg-success" style="width:25%">
+                  <h6>Low-Low</h6>
+                </div>
+                <div class="progress-bar bg-info" style="width:25%">
+                  <h6>Low-High</h6>
+              </div>
+            </div>
+              <p class="text-black-50 mb-0"><br>Warna dari <i>polygon</i> kecamatan ditampilkan sesuai dari indikator dari indeks zona kecamatan. Warna dapat beruba-ubah bergantung dari data yang telah melewati proses Autokorelasi Spasial.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project One Row -->
+        <div class="row justify-content-center no-gutters mb-5 mb-lg-0">
+          <div class="col-lg-6">
+            <canvas id="myChart"></canvas>
+            <!-- <img class="img-fluid" src="LandingPage/img/demo-image-01.jpg" alt=""> -->
+          </div>
+          <div class="col-lg-6">
+            <div class="bg-black text-center h-100 project">
+              <div class="d-flex h-100">
+                <div class="project-text w-100 my-auto text-center text-lg-left">
+                  <h4 class="text-white">Moran's Scatterplot</h4>
+                  <p class="mb-0 text-white-50">Visualisasi berbentuk <i>Scatter Chart</i> yang mewakili nilai tiap indeks dari masing-masing daerah.</p>
+                  <hr class="d-none d-lg-block mb-0 ml-0">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project Two Row -->
+        <div class="row justify-content-center no-gutters">
+          <div class="col-lg-6">
+            <div id="chartContainer"></div>
+            <!-- <img class="img-fluid" src="LandingPage/img/demo-image-02.jpg" alt=""> -->
+          </div>
+          <div class="col-lg-6 order-lg-first">
+            <div class="bg-black text-center h-100 project">
+              <div class="d-flex h-100">
+                <div class="project-text w-100 my-auto text-center text-lg-right">
+                  <h4 class="text-white">Contiguity</h4>
+                  <p class="mb-0 text-white-50">Visualisasi berbentuk <i>bar chart</i> yang mewakili jumlah ketetanggaan dari setiap kecamatan.</p>
+                  <hr class="d-none d-lg-block mb-0 mr-0">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Signup Section -->
+    <section id="signup" class="signup-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-10 col-lg-8 mx-auto text-center">
+
+            <i class="far fa-paper-plane fa-2x mb-2 text-white"></i>
+            <h2 class="text-white mb-5">About</h2>
+            <h6 class="text-white-50 mx-auto mt-2 mb-5">Konflik antar masyarakat saat pilkada rentan terjadi di berbagai tempat. Mengingat jumlah simpatisan tiap partai politik yang menyebar, konflik pun rentan terjadi di mana saja. Perlu dilakukan upaya antisipasi supaya konflik masyarakat tidak meluas, yaitu membuat pemetaan lokasi konflik selama pilkada berlangsung. Dari masalah tersebut, diperlukan adanya aplikasi pemetaan untuk menunjukkan autokorelasi spasial konflik masyarakat saat pilkada berlangsung demi mencegah supaya konflik tidak meluas.</h6>
+
+            <!-- <form class="form-inline d-flex">
+              <input type="email" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="inputEmail" placeholder="Enter email address...">
+              <button type="submit" class="btn btn-primary mx-auto">Subscribe</button>
+            </form> -->
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section bg-black">
+      <div class="container">
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-user text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Albiyan Abdika</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">2103151020</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-user text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Rengga Asmara, S.Si., M.T.</h4>
+                <hr class="my-4">
+                <div class="small text-black-50">
+                  <a href="#">198105082005011002</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3 mb-md-0">
+            <div class="card py-4 h-100">
+              <div class="card-body text-center">
+                <i class="fas fa-user text-primary mb-2"></i>
+                <h4 class="text-uppercase m-0">Ir. Wahjoe Tjatur Sesulihatien, M.T., Ph.D.</h4>
+                <hr class="my-2">
+                <div class="small text-black-50"><br> 196506221991032003</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="social d-flex justify-content-center">
+          <a href="https://twitter.com/Albiyan_Abdika" class="mx-2">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="https://www.facebook.com/albiyan.abdika" class="mx-2">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://github.com/abdikaalbiyan" class="mx-2">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black small text-center text-white-50">
+      <div class="container">
+        Copyright &copy; Albiyan Abdika 2018
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="LandingPage/vendor/jquery/jquery.min.js"></script>
+    <script src="LandingPage/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="LandingPage/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="LandingPage/js/grayscale.min.js"></script>
+
+    <script>
+        var infoWindow;
+        var map;
+        var zKejadian = [];
+        var historikonflik = [];
+
+        function getData() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              fillMap(JSON.parse(xhttp.responseText));
+              // fillKecamatan(JSON.parse(xhttp.responseText));
+            }
+          };
+          xhttp.open("GET", "/api/kecamatanAll", true);
+          xhttp.send();
+        }
+
+        function getData2() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              fillBobot(JSON.parse(xhttp.responseText));
+            }
+          };
+          xhttp.open("GET", "/api/zKejadian", true);
+          xhttp.send();
+        }
+
+        function getData3() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              fillKejadian(JSON.parse(xhttp.responseText));
+            }
+          };
+          xhttp.open("GET", "/api/historikonflik/All", true);
+          xhttp.send();
+        }
+
+        function fillKecamatan(data){
+          let list = document.getElementById("kecamatan").firstChild.firstChild;
+
+          data.forEach(function(datum){
+            let kolomList = document.createElement("a");
+            let isiList = document.createElement("h4");
+            let daftarList = document.createTextNode(datum.daerah);
+
+            kolomList.setAttribute("href","#");
+            kolomList.setAttribute("class", "list-group-item point-item");
+
+            isiList.appendChild(daftarList);
+            kolomList.appendChild(isiList);
+
+            list.appendChild(kolomList);
+          }
+        )
+        }
+
+        function fillKejadian(data) {
+          data.forEach(function(datum) {
+            historikonflik.push(datum);
+          });
+        }
+
+        function fillBobot(data) {
+          data.forEach(function(datum) {
+            zKejadian.push(datum);
+          });
+        }
+
+        function fillMap(data){
+          initMap(data);
+        }
+
+        function initMap(data = []) {
+           map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -7.2726485, lng: 112.7030382},
+            zoom: 11,
+            styles: [{
+              stylers: [{
+                saturation: -100
+              }]
+            }],
+            mapTypeId: 'terrain'
+            });
+
+            let w = 0;
+
+          data.forEach(function(kecamatan){
+            let warna = ''
+            // console.log("Isinya GEOM: "+kecamatan.geom);
+            // console.log("Hallo");
+            if (kecamatan.geom != null) {
+              var tepi = kecamatan.geom.replace("POLYGON Z ((","").replace("))","").split(",");
+                  var batas = [];
+
+                  if((zKejadian[w]).zet2018 > 0 && (zKejadian[w]).bobotz2018 > 0 ){
+                    warna = '#CC1506';
+                    console.log("a")
+                  } else
+                  if((zKejadian[w]).zet2018 > 0 && (zKejadian[w]).bobotz2018 < 0){
+                    warna = '#FFC443';
+                    console.log("b")
+                  } else
+                  if((zKejadian[w]).zet2018 < 0 && (zKejadian[w]).bobotz2018 < 0){
+                    warna = '#5fb826';
+                    console.log("c")
+                  }
+                  else{
+                    warna = '#5AB2EC';
+                    console.log("d")
+                  }
+                  console.log((zKejadian[w]).zet2018+" "+(zKejadian[w]).bobotz2018)
+
+                  tepi.forEach(function(geom) {
+                      var latLng = geom.split(" ");
+                       // console.log(latLng);
+
+                      batas.push({
+                          lat: parseFloat(latLng[1]),
+                          lng: parseFloat(latLng[0])
+                      });
+                      // console.log(batas);
+                  });
+
+                  var kecamatanPoly = new google.maps.Polygon({
+                      paths: batas,
+                      strokeColor: '#000000',
+                      strokeOpacity: 1,
+                      strokeWeight: 0.5,
+                      fillColor: warna,
+                      fillOpacity: 0.6
+                  });
+                  w++;
+                  //console.log(geom.warna);
+
+                  google.maps.event.addListener(kecamatanPoly,'click',function() {
+                      // console.log(z2018);
+                      // console.log(kecamatan);
+                      console.log(historikonflik);
+
+                      infoWindow.setContent(
+                        '<b>' + kecamatan.daerah + '</b>' +
+                        '<br><br>Pelanggaran Administrasi: ' + historikonflik[kecamatan.id-1].administrasi +
+                        '<br>Money Politics: ' + historikonflik[kecamatan.id-1].politikuang +
+                        '<br>Pelanggaran Kode Etik: ' + historikonflik[kecamatan.id-1].kodeetik +
+                      '<br><b>Jumlah kejadian: ' + historikonflik[kecamatan.id-1].tahun2018 + '</b>' +
+                      '<br>______________________' +
+                      '<br>Bobot Daerah :&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp' + zKejadian[kecamatan.id-1].zet2018 + '<br>Bobot Ketetanggaan: &nbsp &nbsp &nbsp' + zKejadian[kecamatan.id-1].bobotz2018 );
+                      infoWindow.setPosition(batas[0]);
+                      infoWindow.open(map);
+                 });
+                   kecamatanPoly.setMap(map);
+            }
+          });
+          infoWindow = new google.maps.InfoWindow;
+        }
+
+
+        getData();
+        getData2();
+        getData3();
+
+
+        </script>
+
+        <script type="text/javascript">
+
+      var x = [{z2018: 0}];
+      var y = [{bobotz2018: 0}];
+
+      getData(0,30);
+
+      function getData(min, max){
+        $.ajax({
+            type : "GET",
+            data : "",
+            url : "/api/zKejadian?start=" + min + "&max=" + max,
+            success : function(result){
+
+                $.each(result, function(id, val){
+                    let obj = {x: val.zet2018, y: val.bobotz2018}
+                    x.push(obj)
+                    // y.push(obj)
+                });
+                makeKejadianChart(x,y);
+            }
+          });
+        }
+
+        Chart.plugins.register({
+          beforeDraw: function(datakejadian) {
+            var chartArea = datakejadian.chartArea;
+            var ctx = datakejadian.chart.ctx;
+
+            // Replace these IDs if you have given your axes IDs in the config
+            var xScale = datakejadian.scales['x-axis-1'];
+            var yScale = datakejadian.scales['y-axis-1'];
+
+            var midX = xScale.getPixelForValue(0);
+            var midY = yScale.getPixelForValue(0);
+
+            // Top left quadrant
+             ctx.fillStyle = 'rgb(176,196,222)'
+             ctx.fillRect(chartArea.left, chartArea.top, midX - chartArea.left, midY - chartArea.top);
+
+             // Top right quadrant
+             ctx.fillStyle =  'rgb(153,76,76)'
+             ctx.fillRect(midX, chartArea.top, chartArea.right - midX, midY - chartArea.top);
+
+             // Bottom right quadrant
+              ctx.fillStyle = 'rgb(189,183,107)'
+              ctx.fillRect(midX, midY, chartArea.right - midX, chartArea.bottom - midY);
+
+              // Bottom left quadrant
+              ctx.fillStyle = 'rgb(144,238,144)'
+              ctx.fillRect(chartArea.left, midY, midX - chartArea.left, chartArea.bottom - midY);
+
+
+          }
+        });
+
+        function makeKejadianChart(datakejadian){
+          console.log(x,y);
+
+          var ctx = document.getElementById("myChart").getContext('2d');
+          var myChart = new Chart(ctx, {
+          type: 'scatter',
+          data: {
+              labels: datakejadian,
+              datasets: [{
+                  label:' ',
+                  data: x, y,
+                  fill: false,
+                  borderColor: [
+                      'rgba(0, 0, 0)'
+                  ],
+                  backgroundColor: [
+                      'rgba(0, 0, 0)'
+                  ],
+                  borderWidth: 8
+              },
+              ]
+          },
+          });
+        }
+      </script>
+
+      <script>
+            window.onload = function () {
+              var chart2 = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+
+                axisX:{
+                  interval: 2
+                },
+                axisY2:{
+                  interlacedColor: "rgb(220, 225, 234)",
+                  gridColor: "rgb(220, 225, 234)",
+                  //title: "Jumlah Ketetanggan Kecamatan"
+                },
+                data: [{
+                  type: "column",
+                  name: "kecamatan",
+                  axisYType: "secondary",
+                  color: "rgb(100, 110, 127)",
+                  dataPoints: [
+                    { y: 4, label: "Benowo" },
+                    { y: 2, label: "Pakal" },
+                    { y: 5, label: "Sambikerep" },
+                    { y: 3, label: "Lakasantri" },
+                    { y: 5, label: "Asemrowo" },
+                    { y: 6, label: "Tandes" },
+                    { y: 5, label: "Krembangan" },
+                    { y: 8, label: "Sukomanunggal" },
+                    { y: 8, label: "Dukuh Pakis" },
+                    { y: 5, label: "Wiyung" },
+                    { y: 5, label: "Pabean Cantikan" },
+                    { y: 5, label: "Semampir" },
+                    { y: 5, label: "Kenjeran" },
+                    { y: 8, label: "Bubutan" },
+                    { y: 8, label: "Sawahan" },
+                    { y: 8, label: "Simokerto" },
+                    { y: 8, label: "Genteng" },
+                    { y: 5, label: "Tambaksari" },
+                    { y: 3, label: "Bulak" },
+                    { y: 8, label: "Tegalsari" },
+                    { y: 8, label: "Wonokromo" },
+                    { y: 8, label: "Gubeng" },
+                    { y: 5, label: "Karangpilang" },
+                    { y: 5, label: "Jambangan" },
+                    { y: 5, label: "Gayungan" },
+                    { y: 5, label: "Wonocolo" },
+                    { y: 5, label: "Trenggilis Mejoyo" },
+                    { y: 8, label: "Mulyorejo" },
+                    { y: 6, label: "Sukolilo" },
+                    { y: 3, label: "Rungkut" },
+                    { y: 2, label: "Gunung Anyar" }
+                  ]
+                }]
+              });
+              chart2.render();
+              }
+          </script>
+
+  </body>
+
+</html>

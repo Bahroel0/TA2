@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>Konflik-GIS</title>
+        <!-- <meta name="author" content="luckynvic@gmail.com"> -->
+        <link href="web/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="web/ext/customScroll/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+        <link href="web/css/style.default.css" rel="stylesheet">
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBghk9jAdvsc1oOXNRmpYYaIMXEUCdCkZY&callback=initMap"
+        async defer></script>
+
+
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default nav-fixed-top" role="navigation" id="app-nav-bar" >
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Konflik GIS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="index">Home</a>
+                    </li>
+                    <li>
+                        <a href="chart">Chart</a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav">
+                    <!-- <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Setting</a>
+                            </li>
+                            <li>
+                                <a href="#">Manage User</a>
+                            </li>
+
+                        </ul>
+                    </li> -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Table<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="table">Data Kecamatan</a>
+                            </li>
+                            <li>
+                                <a href="tablekonflik">Histori Kejadian</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about">About</a>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><p class="navbar-text">Signed in as Admin</p></li>
+                    <li>
+                        <a href="masuk">Login</a>
+                    </li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+
+        <div class="container .col-xs-2">
+          <div class="col-xs-2">
+          <form>
+            <div class="form-group">
+              <label for="sel1">Tahun </label>
+              <select class="form-control" id="sel1">
+                <!-- <option>2008</option> -->
+                <option>2018</option>
+                <option>DataSet</option>
+              </select>
+              <br>
+            </div>
+          </form>
+        </div>
+          <label for="sel1">Index Zona Kecamatan <br></label>
+        <div class="progress" style="height:33px">
+          <div class="progress-bar progress-bar-danger" role="progressbar" style="width:25%">
+            <h5>High-High</h5>
+          </div>
+          <div class="progress-bar progress-bar-warning" role="progressbar" style="width:25%">
+            <h5>High-Low</h5>
+          </div>
+          <div class="progress-bar progress-bar-success" role="progressbar" style="width:25%">
+            <h5>Low-Low</h5>
+          </div>
+          <div class="progress-bar progress-bar-info" role="progressbar" style="width:25%">
+            <h5>Low-High</h5>
+        </div>
+      </div>
+      </div>
+
+          <div class="container, jumbotron, container" id="map" style="width: 85%; height: 74%"></div>
+
+
+        <!-- <div class="visible-lg visible-md">
+
+            <div id="sidemenu" class="well">
+
+                <div class="divider10"></div>
+                <div class="panel panel-default">
+                </div>
+                <div class="list-group point-list-view" id="kecamatan">
+                    <a href="#"class="list-group-item point-item, active"> <h4 class="list-group-item-heading" >Lokasi</h4>
+                    <p class="list-group-item-text">
+                        Nama Kecamatan
+                    </p> </a>
+                </div>
+            </div>
+        </div> -->
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="web/js/jquery-1.10.2.min.js"></script>
+        <script src="web/js/bootstrap.min.js"></script>
+        <script src="web/ext/customScroll/js/jquery.mCustomScrollbar.min.js"></script>
+        <script src="web/ext/customScroll/js/jquery.mousewheel.min.js"></script>
+        <script src="web/js/application.js"></script>
+
+        <script>
+        var infoWindow;
+        var map;
+        var zKejadian = [];
+        var historikonflik = [];
+
+        function getData() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              fillMap(JSON.parse(xhttp.responseText));
+              // fillKecamatan(JSON.parse(xhttp.responseText));
+            }
+          };
+          xhttp.open("GET", "/api/kecamatanAll", true);
+          xhttp.send();
+        }
+
+        function getData2() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              fillBobot(JSON.parse(xhttp.responseText));
+            }
+          };
+          xhttp.open("GET", "/api/zKejadian", true);
+          xhttp.send();
+        }
+
+        function getData3() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              fillKejadian(JSON.parse(xhttp.responseText));
+              // fillKecamatan(JSON.parse(xhttp.responseText));
+            }
+          };
+          xhttp.open("GET", "/api/historikonflik/All", true);
+          xhttp.send();
+        }
+
+        function fillKecamatan(data){
+          let list = document.getElementById("kecamatan").firstChild.firstChild;
+
+          data.forEach(function(datum){
+            let kolomList = document.createElement("a");
+            let isiList = document.createElement("h4");
+            let daftarList = document.createTextNode(datum.daerah);
+
+            kolomList.setAttribute("href","#");
+            kolomList.setAttribute("class", "list-group-item point-item");
+
+            isiList.appendChild(daftarList);
+            kolomList.appendChild(isiList);
+
+            list.appendChild(kolomList);
+          }
+        )
+        }
+
+        function fillKejadian(data) {
+          data.forEach(function(datum) {
+            historikonflik.push(datum);
+          });
+        }
+
+        function fillBobot(data) {
+          data.forEach(function(datum) {
+            zKejadian.push(datum);
+          });
+        }
+
+        function fillMap(data){
+          initMap(data);
+        }
+
+        function initMap(data = []) {
+           map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -7.2726485, lng: 112.7030382},
+            zoom: 12,
+            mapTypeId: 'terrain'
+            });
+
+            let w = 0;
+
+          data.forEach(function(kecamatan){
+            let warna = ''
+
+            if (kecamatan.geom != null) {
+              var tepi = kecamatan.geom.replace("POLYGON Z ((","").replace("))","").split(",");
+                  var batas = [];
+
+                  if((zKejadian[w]).zet2018 > 0 && (zKejadian[w]).bobotz2018 > 0 ){
+                    warna = '#CC1506';
+                  //  console.log("a")
+                  } else
+                  if((zKejadian[w]).zet2018 > 0 && (zKejadian[w]).bobotz2018 < 0){
+                    warna = '#FFC443';
+                    //console.log("b")
+                  } else
+                  if((zKejadian[w]).zet2018 < 0 && (zKejadian[w]).bobotz2018 < 0){
+                    warna = '#5fb826';
+                //    console.log("c")
+                  }
+                  else{
+                    warna = '#5AB2EC';
+                  //  console.log("d")
+                  }
+                  //console.log((zKejadian[w]).zet2018+" "+(zKejadian[w]).bobotZ2018)
+
+                  tepi.forEach(function(geom) {
+                      var latLng = geom.split(" ");
+                       // console.log(latLng);
+
+                      batas.push({
+                          lat: parseFloat(latLng[1]),
+                          lng: parseFloat(latLng[0])
+                      });
+                      // console.log(batas);
+                  });
+
+                  var kecamatanPoly = new google.maps.Polygon({
+                      paths: batas,
+                      strokeColor: '#000000',
+                      strokeOpacity: 1,
+                      strokeWeight: 0.5,
+                      fillColor: warna,
+                      fillOpacity: 0.6
+                  });
+                  w++;
+                  //console.log(geom.warna);
+
+                  google.maps.event.addListener(kecamatanPoly,'click',function() {
+                      // console.log(zKejadian);
+                      // console.log(kecamatan);
+                      console.log(historikonflik);
+
+                       infoWindow.setContent(
+                         '<b>' + kecamatan.daerah + '</b>' +
+                         '<br><br>Pelanggaran Administrasi: ' + historikonflik[kecamatan.id-1].administrasi +
+                         '<br>Money Politics: ' + historikonflik[kecamatan.id-1].politikuang +
+                         '<br>Pelanggaran Kode Etik: ' + historikonflik[kecamatan.id-1].kodeetik +
+                       '<br><b>Jumlah kejadian: ' + historikonflik[kecamatan.id-1].tahun2018 + '</b>' +
+                       '<br>______________________' +
+                       '<br>Bobot Daerah :&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp' + zKejadian[kecamatan.id-1].zet2018 + '<br>Bobot Ketetanggaan: &nbsp &nbsp &nbsp' + zKejadian[kecamatan.id-1].bobotz2018 );
+                       infoWindow.setPosition(batas[0]);
+                       infoWindow.open(map);
+                  });
+                    kecamatanPoly.setMap(map);
+            }
+          });
+          infoWindow = new google.maps.InfoWindow;
+        }
+
+
+        getData();
+        getData2();
+        getData3();
+
+        (function($) {
+
+				$(".point-list-view").mCustomScrollbar({
+					scrollButtons : {
+						enable : true
+					},
+					theme : 'dark-thick',
+					contentTouchScroll : true
+				});
+
+			})(jQuery);
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>GIS Application - Extended Template by Cyber313</title>
+        <meta name="author" content="luckynvic@gmail.com">
+        <link href="web/css/bootstrap.min.css" rel="stylesheet">
+        <link href="web/css/style.default.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default nav-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Cyber GIS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="index">Home</a>
+                    </li>
+                    <li class="active">
+                        <a href="#">Browse</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Setting</a>
+                            </li>
+                            <li>
+                                <a href="#">Manage User</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Table<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="table">Data Kecamatan</a>
+                            </li>
+                            <li>
+                                <a href="tablekonflik">Histori Kejadian</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                       <a href="about">About</a>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><p class="navbar-text">Signed in as Cyber</p></li>
+                    <li>
+                        <a href="#">Login</a>
+                    </li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+
+        <div class="col-xs-12 col-md-4">
+            <div class="well">
+                <form class="form-inline" role="form">
+                    <div class="form-group ">
+                        <label class="sr-only" for="searchText">Search</label>
+                        <input type="text" class="form-control input-sm" id="searchText" placeholder="Search Location">
+                    </div>
+                    <button type="submit" class="btn btn-default btn-sm">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                    <button class="btn btn-default btn-sm">
+                        <i class="glyphicon glyphicon-filter"></i> Filter
+                    </button>
+                </form>
+
+                <div class="divider20"></div>
+                <div class="hidden-xs hidden-sm">
+                  <div id="chartContainer"></div>
+                  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                  <div id="kejadianArea" style="width: 400px; height: 300px;">
+                    <canvas id="myChart"></canvas>
+                  </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8">
+            <div id="list-kecamatan" class="row">
+
+            </div>
+            <div class="row">
+                <ul class="pagination">
+                    <li>
+                        <a href="#">&laquo;</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="bukaHalaman(1)">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#">4</a>
+                    </li>
+                    <li>
+                        <a href="#">5</a>
+                    </li>
+                    <li>
+                        <a href="#">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="web/js/jquery-1.10.2.min.js"></script>
+        <script src="web/js/bootstrap.min.js"></script>
+        <script src="web/js/holder.js"></script>
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+				<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+				<script type="text/javascript" src="web/jquery/jquery-1.10.2.js"></script>
+
+				<script type="text/javascript">
+
+				var x = [{x: 0}];
+				var y = [{y: 0}];
+        let halaman = 1;
+
+
+				getData(0,30);
+
+				function getData(min, max){
+			    $.ajax({
+			        type : "GET",
+			        data : "",
+			        url : "/api/kecamatan?start=" + min + "&max=" + max,
+			        success : function(result){
+
+			            $.each(result, function(id, val){
+											let obj = {x: val.x, y: val.y}
+			               	x.push(obj),
+											y.push(obj)
+			            });
+									makeKejadianChart(x,y);
+			        }
+						});
+					}
+
+        function getKecamatan() {
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    //console.log(this.responseText);
+                    fillKecamatan(JSON.parse(this.responseText));
+                }
+            };
+
+            xhttp.open("GET", "/api/kecamatan", true);
+            xhttp.setRequestHeader("Content-type","application/json");
+            xhttp.send();
+        }
+
+          function fillKecamatan(data){
+            let listKecamatan = document.getElementById("list-kecamatan");
+
+            data.forEach(function(datum){
+              console.log(datum);
+              //inisialisasi element
+              let rowContainer = document.createElement("div");
+              let thumnailContainer = document.createElement("div");
+              let gambar = document.createElement("img");
+              let captionContainer = document.createElement("div");
+              let isiList = document.createElement("h4");
+              let description = document.createElement("p");
+              let daftarList = document.createTextNode(datum.daerah);
+              let descriptionText = document.createTextNode("Deskripsi Kecamatan");
+
+
+              // Isi konten element
+              rowContainer.setAttribute("class", "col-sm-6 col-md-5 col-lg-4 point-item-thumbnail");
+              thumnailContainer.setAttribute("class", "thumbnail");
+              captionContainer.setAttribute("class", "caption");
+              gambar.setAttribute("class", "img-responsive");
+              gambar.setAttribute("src", "holder.js/300x200");
+
+              // gabungkan element
+              thumnailContainer.append(gambar);
+              thumnailContainer.append(captionContainer);
+              captionContainer.append(isiList);
+              captionContainer.append(description);
+              isiList.append(daftarList);
+              description.append(descriptionText);
+
+              rowContainer.append(thumnailContainer);
+
+              listKecamatan.append(rowContainer);
+            }
+          );
+          }
+
+          function bukaHalaman(halaman) {
+            resetHalaman();
+            halaman = halaman;
+            getKecamatan();
+          }
+
+          function resetHalaman() {
+            let elemen = document.getElementsByClassName("point-item-thumbnail");
+
+            while(elemen[0]) {
+              elemen[0].parentNode.removeChild(elemen[0]);
+            }
+          }
+
+          function next(halaman){
+            halaman = halaman + 1;
+            getKecamatan();
+          }
+
+					function makeKejadianChart(datakejadian){
+						console.log(x,y);
+
+						var ctx = document.getElementById("myChart").getContext('2d');
+						var myChart = new Chart(ctx, {
+						type: 'scatter',
+						data: {
+								labels: datakejadian,
+								datasets: [{
+										label:'Scatterplot',
+										data: x, y,
+										fill: false,
+										borderColor: [
+												'rgba(0, 255, 0, 1)'
+										],
+										backgroundColor: [
+												'rgba(0, 255, 0, 0.5)'
+										],
+										borderWidth: 1
+								},
+								]
+						},
+            options: {
+                responsive: true,
+                title: {
+                  display: true,
+                },
+                tooltips: {
+                  mode: 'index',
+                  intersect: true
+                },
+                annotation: {
+                  annotations: [{
+                    type: 'line',
+                    mode: 'horizontal',
+                    scaleID: 'y-axis-0',
+                    value: 0.234532,
+                    endValue: 0,
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 4,
+                    label: {
+                      enabled: true,
+                      content: 'Trendline',
+                      yAdjust: -16,
+                    }
+                  }]
+                }
+              }
+						});
+					}
+
+          getKecamatan();
+
+				</script>
+
+				<script>
+						window.onload = function () {
+							var chart2 = new CanvasJS.Chart("chartContainer", {
+								animationEnabled: true,
+
+								axisX:{
+									interval: 2
+								},
+								axisY2:{
+									interlacedColor: "rgba(1,77,101,.2)",
+									gridColor: "rgba(1,77,101,.1)",
+									//title: "Jumlah Ketetanggan Kecamatan"
+								},
+								data: [{
+									type: "bar",
+									name: "kecamatan",
+									axisYType: "secondary",
+									color: "#99b54d",
+									dataPoints: [
+										{ y: 4, label: "Benowo" },
+										{ y: 2, label: "Pakal" },
+										{ y: 5, label: "Sambikerep" },
+										{ y: 3, label: "Lakasantri" },
+										{ y: 5, label: "Asemrowo" },
+										{ y: 6, label: "Tandes" },
+										{ y: 5, label: "Krembangan" },
+										{ y: 8, label: "Sukomanunggal" },
+										{ y: 8, label: "Dukuh Pakis" },
+										{ y: 5, label: "Wiyung" },
+										{ y: 5, label: "Pabean Cantikan" },
+										{ y: 5, label: "Semampir" },
+										{ y: 5, label: "Kenjeran" },
+										{ y: 8, label: "Bubutan" },
+										{ y: 5, label: "Sawahan" },
+										{ y: 5, label: "Simokerto" },
+										{ y: 8, label: "Genteng" },
+										{ y: 5, label: "Tambaksari" },
+										{ y: 3, label: "Bulak" },
+										{ y: 8, label: "Tegalsari" },
+										{ y: 8, label: "Wonokromo" },
+										{ y: 8, label: "Gubeng" },
+										{ y: 5, label: "Karangpilang" },
+										{ y: 5, label: "Jambangan" },
+										{ y: 5, label: "Gayungan" },
+										{ y: 5, label: "Wonocolo" },
+										{ y: 5, label: "Trenggilis Mejoyo" },
+										{ y: 8, label: "Mulyorejo" },
+										{ y: 5, label: "Sukolilo" },
+										{ y: 3, label: "Rungkut" },
+										{ y: 2, label: "Gunung Anyar" }
+									]
+								}]
+							});
+							chart2.render();
+							}
+					</script>
+
+
+    </body>
+</html>

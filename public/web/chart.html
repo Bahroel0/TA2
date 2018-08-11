@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>KonfliGIS</title>
+        <!-- <meta name="author" content="luckynvic@gmail.com"> -->
+        <link href="web/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="web/ext/customScroll/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+        <link href="web/css/style.default.css" rel="stylesheet">
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default nav-fixed-top" role="navigation" id="app-nav-bar" >
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Konflik GIS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="index">Home</a>
+                    </li>
+                    <li class="active">
+                        <a href="chart">Chart</a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav">
+                    <!-- <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Setting</a>
+                            </li>
+                            <li>
+                                <a href="#">Manage User</a>
+                            </li>
+
+                        </ul>
+                    </li> -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Table<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="table">Point</a>
+                            </li>
+                            <li>
+                                <a href="tablekonflik">Histori Konflik</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about">About</a>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <p class="navbar-text">
+                            Signed in as Admin
+                        </p>
+                    </li>
+                    <li>
+                        <a href="#">Login</a>
+                    </li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        <div class="container">
+            <div class="jumbotron">
+                <div class="container">
+                  <h3>Contiguity </h3>
+                  <div id="chartContainer"></div>
+                  <br><br><br><br><br><br><br><br><br><br>
+                  <!-- <div id="kejadianArea" style="width: 1000px; height: 900px;"> -->
+                    <canvas id="myChart"></canvas>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="web/js/jquery-1.10.2.min.js"></script>
+        <script src="web/js/bootstrap.min.js"></script>
+        <script src="web/js/holder.js"></script>
+        <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+        <script type="text/javascript" src="web/jquery/jquery-1.10.2.js"></script>
+
+        <script type="text/javascript">
+
+        var x = [{z2018: 0}];
+        var y = [{bobotz2018: 0}];
+
+        getData(0,30);
+
+        function getData(min, max){
+          $.ajax({
+              type : "GET",
+              data : "",
+              url : "/api/zKejadian?start=" + min + "&max=" + max,
+              success : function(result){
+
+                  $.each(result, function(id, val){
+                      let obj = {x: val.zet2018, y: val.bobotz2018}
+                      x.push(obj)
+                      // y.push(obj)
+                  });
+                  makeKejadianChart(x,y);
+              }
+            });
+          }
+
+          Chart.plugins.register({
+            beforeDraw: function(datakejadian) {
+              var chartArea = datakejadian.chartArea;
+              var ctx = datakejadian.chart.ctx;
+
+              // Replace these IDs if you have given your axes IDs in the config
+              var xScale = datakejadian.scales['x-axis-1'];
+              var yScale = datakejadian.scales['y-axis-1'];
+
+              var midX = xScale.getPixelForValue(0);
+              var midY = yScale.getPixelForValue(0);
+
+              // Top left quadrant
+               ctx.fillStyle = 'rgb(0.0.255)'
+               ctx.fillRect(chartArea.left, chartArea.top, midX - chartArea.left, midY - chartArea.top);
+
+               // Top right quadrant
+               ctx.fillStyle =  'rgb(255,0,0)'
+               ctx.fillRect(midX, chartArea.top, chartArea.right - midX, midY - chartArea.top);
+
+               // Bottom right quadrant
+                ctx.fillStyle = 'rgb(255,255,0)'
+                ctx.fillRect(midX, midY, chartArea.right - midX, chartArea.bottom - midY);
+
+                // Bottom left quadrant
+                ctx.fillStyle = 'rgb(0,255,0)'
+                ctx.fillRect(chartArea.left, midY, midX - chartArea.left, chartArea.bottom - midY);
+
+
+            }
+          });
+
+          function makeKejadianChart(datakejadian){
+            console.log(x,y);
+
+            var ctx = document.getElementById("myChart").getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                labels: datakejadian,
+                datasets: [{
+                    label:' ',
+                    data: x, y,
+                    fill: false,
+                    borderColor: [
+                        'rgba(0, 0, 0)'
+                    ],
+                    backgroundColor: [
+                        'rgba(0, 0, 255)'
+                    ],
+                    borderWidth: 8
+                },
+                ]
+            },
+            });
+          }
+
+
+
+        </script>
+
+        <script>
+            window.onload = function () {
+              var chart2 = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+
+                axisX:{
+                  interval: 2
+                },
+                axisY2:{
+                  interlacedColor: "rgba(1,77,101,.2)",
+                  gridColor: "rgba(1,77,101,.1)",
+                  //title: "Jumlah Ketetanggan Kecamatan"
+                },
+                data: [{
+                  type: "column",
+                  name: "kecamatan",
+                  axisYType: "secondary",
+                  color: "#99b54d",
+                  dataPoints: [
+                    { y: 4, label: "Benowo" },
+                    { y: 2, label: "Pakal" },
+                    { y: 5, label: "Sambikerep" },
+                    { y: 3, label: "Lakasantri" },
+                    { y: 5, label: "Asemrowo" },
+                    { y: 6, label: "Tandes" },
+                    { y: 5, label: "Krembangan" },
+                    { y: 8, label: "Sukomanunggal" },
+                    { y: 8, label: "Dukuh Pakis" },
+                    { y: 5, label: "Wiyung" },
+                    { y: 5, label: "Pabean Cantikan" },
+                    { y: 5, label: "Semampir" },
+                    { y: 5, label: "Kenjeran" },
+                    { y: 8, label: "Bubutan" },
+                    { y: 8, label: "Sawahan" },
+                    { y: 8, label: "Simokerto" },
+                    { y: 8, label: "Genteng" },
+                    { y: 5, label: "Tambaksari" },
+                    { y: 3, label: "Bulak" },
+                    { y: 8, label: "Tegalsari" },
+                    { y: 8, label: "Wonokromo" },
+                    { y: 8, label: "Gubeng" },
+                    { y: 5, label: "Karangpilang" },
+                    { y: 5, label: "Jambangan" },
+                    { y: 5, label: "Gayungan" },
+                    { y: 5, label: "Wonocolo" },
+                    { y: 5, label: "Trenggilis Mejoyo" },
+                    { y: 8, label: "Mulyorejo" },
+                    { y: 6, label: "Sukolilo" },
+                    { y: 3, label: "Rungkut" },
+                    { y: 2, label: "Gunung Anyar" }
+                  ]
+                }]
+              });
+              chart2.render();
+              }
+          </script>
+
+
+    </body>
+  </html>

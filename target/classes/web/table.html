@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <title>GIS Application - Extended Template by Cyber313</title>
+
+        <link href="web/css/bootstrap.min.css" rel="stylesheet">
+
+        <link href="web/ext/customScroll/css/jquery.mCustomScrollbar.css" rel="stylesheet">
+        <link href="web/css/style.default.css" rel="stylesheet">
+        <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    </head>
+    <body>
+        <nav class="navbar navbar-default nav-fixed-top" role="navigation" id="app-nav-bar" >
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Cyber GIS</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="index">Home</a>
+                    </li>
+                    <li>
+                        <a href="browse">Browse</a>
+                    </li>
+
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Application<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Setting</a>
+                            </li>
+                            <li>
+                                <a href="#">Manage User</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="dropdown, active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Table<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="table">Data Kecamatan</a>
+                            </li>
+                            <li>
+                                <a href="tablekonflik">Histori Kejadian</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="about">About</a>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <p class="navbar-text">
+                            Signed in as Cyber
+                        </p>
+                    </li>
+                    <li>
+                        <a href="masuk">Login</a>
+                    </li>
+
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+
+        <div class="container">
+            <h2>Data Kecamatan</h2>
+
+            <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <!-- <th>ID</th> -->
+                  <th>Kecamatan</th>
+                  <th>Contiguity</th>
+                  <th>Kejadian</th>
+                  <th>Zkejadian</th>
+                </tr>
+              </thead>
+              <tbody id="isidata">
+
+              </tbody>
+            </table>
+            <ul class="pagination">
+             <li class="page-item"><a class="page-link" href="#" onclick="bukaHalaman(1)">1</a></li>
+             <li class="page-item"><a class="page-link" href="#" onclick="bukaHalaman(2)">2</a></li>
+             <li class="page-item"><a class="page-link" href="#" onclick="bukaHalaman(3)">3</a></li>
+            </ul>
+            </div>
+        </div>
+
+        <script>
+
+        var halaman = 1;
+        var makshalaman = 3;
+
+        function getKecamatan() {
+            var xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // console.log(this.responseText);
+                    // fillKecamatan(JSON.parse(this.responseText));
+                    let tabel = JSON.parse(this.responseText);
+                    // console.log(tabel);
+                    let listKecamatan = document.getElementById("isidata");
+
+                    tabel.forEach(function(datum) {
+                      console.log(datum);
+                      //inisialisasi element
+                      let isicontainer = document.createElement("tr");
+
+                      // let tdID = document.createElement("td");
+                      let tdKecamatan = document.createElement("td");
+                      let tdContiguity = document.createElement("td");
+                      let tdKejadian = document.createElement("td");
+                      let tdZkejadian = document.createElement("td");
+
+                        // Isi konten element
+                      // let IdText = document.createTextNode(datum.id);
+                      let KecamatanText = document.createTextNode(datum.daerah);
+                      let ContiguityText = document.createTextNode("contiguity");
+                      let KejadianText = document.createTextNode(datum.kejadian);
+                      let ZkejadianText = document.createTextNode("Zkejadian");
+
+                      isicontainer.setAttribute("class","row-kecamatan");
+
+                      // gabungkan element
+                      // tdID.appendChild(IdText);
+                      tdKecamatan.appendChild(KecamatanText);
+                      tdContiguity.appendChild(ContiguityText);
+                      tdKejadian.appendChild(KejadianText);
+                      tdZkejadian.appendChild(ZkejadianText);
+
+                      // isicontainer.appendChild(tdID);
+                      isicontainer.appendChild(tdKecamatan);
+                      isicontainer.appendChild(tdContiguity);
+                      isicontainer.appendChild(tdKejadian);
+                      isicontainer.appendChild(tdZkejadian);
+
+                      listKecamatan.appendChild(isicontainer);
+
+                      });
+                  }
+            };
+
+            console.log("halaman:" + halaman);
+
+            xhttp.open("GET", "/api/kecamatan?halaman="+halaman, true);
+            xhttp.setRequestHeader("Content-type","application/json");
+            xhttp.send();
+        }
+
+        function bukaHalaman(hal){
+          if (hal < 1){
+            hal = 1;
+          }else if(hal >= makshalaman){
+            hal = makshalaman;
+          }
+
+          halaman = hal;
+          resetHalaman();
+          getKecamatan();
+        }
+
+        function resetHalaman() {
+          let elemen = document.getElementsByClassName("row-kecamatan");
+          console.log("elemen:" + elemen.length);
+
+          while(elemen.length) {
+            elemen[0].parentNode.removeChild(elemen[0]);
+          }
+        }
+
+        getKecamatan();
+        </script>
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="web/js/jquery-1.10.2.min.js"></script>
+        <script src="web/js/bootstrap.min.js"></script>
+
+    </body>
+</html>
