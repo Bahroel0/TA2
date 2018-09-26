@@ -7,7 +7,6 @@ com\abdikaalbiyan\Repository\HistorikonflikRepository.class
 com\abdikaalbiyan\Object\Kecamatan$Mapper.class
 com\abdikaalbiyan\Api\UpdateApi.class
 com\abdikaalbiyan\Object\Historikonflik.class
-com\abdikaalbiyan\Object\ZKejadian.class
 com\abdikaalbiyan\Object\ZKejadian$Mapper.class
 com\abdikaalbiyan\Api\ZApi.class
 com\abdikaalbiyan\Object\Tetangga$Mapper.class

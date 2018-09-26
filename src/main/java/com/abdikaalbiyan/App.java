@@ -41,6 +41,7 @@ public class App extends Jooby {
     assets("point_map", "web/point_map.html");
     assets("masuk", "web/login.html");
     assets("about", "web/about.html");
+    assets("about2", "web/about2.html");
     assets("table", "web/table.html");
     assets("tablekonflik", "web/tablekonflik.html");
     assets("chart", "web/chart.html");

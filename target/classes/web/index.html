@@ -145,6 +145,7 @@
         var map;
         var zKejadian = [];
         var historikonflik = [];
+        var moran;
 
         function getData() {
           var xhttp = new XMLHttpRequest();
@@ -178,6 +179,19 @@
             }
           };
           xhttp.open("GET", "/api/historikonflik/All", true);
+          xhttp.send();
+        }
+
+
+        function getData4() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+              fillKejadian(JSON.parse(xhttp.responseText));
+              // fillKecamatan(JSON.parse(xhttp.responseText));
+            }
+          };
+          xhttp.open("GET", "/api/moran2018", true);
           xhttp.send();
         }
 
@@ -275,7 +289,8 @@
                   google.maps.event.addListener(kecamatanPoly,'click',function() {
                       // console.log(zKejadian);
                       // console.log(kecamatan);
-                      console.log(historikonflik);
+                      //console.log(historikonflik);
+                      console.log(moran);
 
                        infoWindow.setContent(
                          '<b>' + kecamatan.daerah + '</b>' +
@@ -284,7 +299,7 @@
                          '<br>Pelanggaran Kode Etik: ' + historikonflik[kecamatan.id-1].kodeetik +
                        '<br><b>Jumlah kejadian: ' + historikonflik[kecamatan.id-1].tahun2018 + '</b>' +
                        '<br>______________________' +
-                       '<br>Bobot Daerah :&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp' + zKejadian[kecamatan.id-1].zet2018 + '<br>Bobot Ketetanggaan: &nbsp &nbsp &nbsp' + zKejadian[kecamatan.id-1].bobotz2018 );
+                       '<br>Bobot Daerah :&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp' + zKejadian[kecamatan.id-1].zet2018 + '<br>Bobot Ketetanggaan: &nbsp &nbsp &nbsp' + zKejadian[kecamatan.id-1].bobotz2018);
                        infoWindow.setPosition(batas[0]);
                        infoWindow.open(map);
                   });
@@ -298,6 +313,7 @@
         getData();
         getData2();
         getData3();
+        getData4();
 
         (function($) {
 
